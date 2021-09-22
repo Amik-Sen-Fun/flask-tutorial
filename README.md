@@ -19,7 +19,7 @@ Now create a file names app.py and write
 from flask import Flask
 
 #intialisation of the app
-app = Flask(\__name\__)
+app = Flask(__name__)
 @app.route('/') # Here you write your website domain also
 def hello():
   return "Hello World"
