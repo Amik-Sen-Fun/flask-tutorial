@@ -98,7 +98,7 @@ def get_only():
 ```python
 from flask import Flask, render_template  # import the renderer
 
-@app.rooute('/')
+@app.route('/')
 def index():
   return render_template('index.html') # Renders the 'index.html' file in templates
 ``` 
