@@ -67,4 +67,41 @@ def hello():
 # Now '/' and '/home' would acces the hello function
 ```
 - In Debug mode server is automatically reloaded
-- 
+- To get information from the url to the python function we access it like
+
+```python
+@app.rooute('/home/<string:name>')
+def hello(name):
+  return "Hello, " + name
+``` 
+> The type of the URl data type can be <int>, <float> etc. Also we can have multiple such variables
+
+- We can make functions specifically for a partiular requests like post, get, out or delete
+
+```python
+@app.route('/', methods = ['GET'])
+def get_only():
+	return "Only Showing Get Requests"
+
+# We can also have multiple such request for a single function as
+
+@app.route('/', methods = ['GET','POST'])
+def get_only():
+        return "Only Showing Get and Post Requests"
+
+``` 
+## Adding Basic Front End templates
+
+- Here we will add HTML and CSS files for our website. The string that we were sending instead of that if we send HTML syntax then also the app woulld work, but it is not really good way so we need to link it to HTML files and CSS stuff.
+- For this we will use Templates. For that make a folder named **templates** and make html files there. To render this file we write the syntax as :
+
+```python
+from flask import Flask, render_template  # import the renderer
+
+@app.rooute('/')
+def index():
+  return render_template('index.html') # Renders the 'index.html' file in templates
+``` 
+
+- Similar to django we can create template inheritance and similar looping and variable stuff can be done in FLask also as both work on jinja. For understanding see the _base.html_ and then _index.html_ and observe the basic concept
+
