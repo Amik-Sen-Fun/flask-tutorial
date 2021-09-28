@@ -104,4 +104,4 @@ def index():
 ``` 
 
 - Similar to django we can create template inheritance and similar looping and variable stuff can be done in FLask also as both work on jinja. For understanding see the _base.html_ and then _index.html_ and observe the basic concept
-
+  
