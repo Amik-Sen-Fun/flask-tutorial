@@ -121,8 +121,30 @@ def showPosts():
 Now to access all the posts we make the following modifications in the post.html file which is done in jinja and are similar to django
 ```html
 <!---previous formatting stuff --->
-  {{% for post in posts %}}
+  {% for post in posts %}
 	<h1>{{post.title}}</h2>
 	<p>{{post.content}}</p>
-  {{% endfor %}}
+  {% endfor %}
 ```
+- Similarly we can use if statememt also
+```python
+all_posts = [{'title': 'Post1', 'content': 'This is content of post 1','author': 'Amik'},
+{'title': 'Post1', 'content': 'This is content of post 1'}]
+@app.route('/posts')
+def showPosts():
+  return render_template('posts.html', posts = all_posts)
+```
+Now if we wanna print the author's name only if it is present then we write
+```html
+<!---previous formatting stuff --->
+  {% for post in posts %}
+        <h1>{{post.title}}</h2>
+	{% if post.author %}
+		<h3>By : {{post.author}}</h3>
+	{% else %}
+		<h3>By : N/A</h3>
+	{% endif %}
+        <p>{{post.content}}</p>
+  {% endfor %}
+```
+
