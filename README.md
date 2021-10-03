@@ -147,4 +147,112 @@ Now if we wanna print the author's name only if it is present then we write
         <p>{{post.content}}</p>
   {% endfor %}
 ```
+## Adding Static Files to our website
+- The static files include css, javasript files, and images. So, we create a **static** folder and then, work accordingly as shown in the code
+- To include the static files, do href similar to normal HTML, but we can also use a jinja varient to write the same URL and the command is as follows:
 
+```html
+<link rel = "stylesheet" href = "static/css/main.css">
+        <!--Below is the jinja syntax to get the url for the file -->
+<link rel = "stylesheet" href = "{{url_for('static', filename = 'css/main.css')}}">
+```
+
+## Adding a Database to our Webpage
+Flask doesn't comes with a database integration method like django, so we need to download a third party library known as _sqlalchemy_ to get the database facilities. To download sqlalchemy use the following command
+
+```
+pip install flask-sqlalchemy
+```
+- Now in the **app.py** file import the library as:
+
+```python 
+from flask_sqlalchemy import SQLAlchemy
+
+# now add a config file to locate the database which is defined as:
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///post.db' # post is DB name
+
+# In the app if you are using any other DB replace 'sqlite' with that
+# Also the the three '/' means relative position of the database
+# For the absolute path of the DB use four '/'
+
+db = SQLAlchemy(app)
+```
+- Now, flask follows a MVC (Model View Controller) architecture, so we need to define classes that will be used for the database.
+
+```python
+from datetime import datetime
+class BlogPost(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(100), nullable = False)
+    content = db.Column(db.Text, nullable = False)
+    author = db.Column(db.String(20), nullable = False, default = 'N/A')
+    post_date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+
+  # Now instead of giving each data point some random name we can give proper name as
+    def __repr__(self):
+        return 'Blog Post' + str(id)
+```
+- Now, this just the design of the Database and the data type of data but this database needs to be created. To do that do the following steps. 
+
+```python
+# Go to the app folder and open terminal and open python 
+
+# To make the app db
+>>> from app import db
+# because in app we declared database as db
+>>> db.create_all()
+
+# Now to do operations we import the required Model:
+>>> from app import BlogPost
+
+# Now to get all the members of a model:
+>>> BlogPost.query.all()
+
+# To add data to the database:
+>>> db.session.add(BlogPost(title = 'Blog Post 1', content = 'Content of Blog Post 1', author = 'Amik'))
+
+# To access specific data we write:
+>>> BlogPost.query.all()[0]
+>>> BlogPost.query.all()[0].title # To get the title of query 0
+
+# To save changes of the session in the DB for future use do:
+>>> db.session.commit()
+```
+
+## Different HTTP Methods on the Database
+
+- To take input from the frontend, create a form like :
+```html
+<h2>Create New Blog Post</h2>
+<form action = '/posts' method = 'POST'>
+        Title : <input type = 'text' name = title id = 'title'>
+        <br>
+        Post : <input type = 'text' name = 'content' id = 'content'>
+        <br>
+        Author : <input type = 'text' name = 'author' id = 'author'>
+        <br>
+        <input type = 'submit' value = 'Post'>
+</form>
+<hr>
+``` 
+- In the backend, change the method in the corresponding function to post and save the changes in the database as :
+```python
+from flask import Flask, render_template, redirect, request 
+# ... the other stuff
+
+@app.route('/posts', methods = ['GET', 'POST'])
+def posts():
+    if request.method == 'POST':
+        post_title = request.form['title']
+        post_content = request.form['content']
+        post_author = request.form['author']
+        new_post = BlogPost(title = post_title, content = post_content, author = post_author)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect('/posts')
+    else:
+        all_posts = BlogPost.query.order_by(BlogPost.post_date.desc()).all()
+        return render_template('posts.html', posts = all_posts)
+```
