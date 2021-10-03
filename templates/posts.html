@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 {% block head %}
 
 <title> Posts </title>
@@ -6,23 +8,22 @@
 
 {% block body %}
 
-<h1> All Posts </h1>
-
-<hr>
-<h2>Create New Blog Post</h2>
-<form action = '/posts' method = 'POST'>
-	Title : <input type = 'text' name = title id = 'title'>
-	<br>
-	Post : <input type = 'text' name = 'content' id = 'content'>
-	<br>
-	Author : <input type = 'text' name = 'author' id = 'author'>
-	<br>
-	<input type = 'submit' value = 'Post'>
-</form>
+<div class = 'container'>
+	<h1 style = "display: inline"> All Posts </h1>
+	<a style = "display: inline;" class = "btn btn-success float-right" href = '/posts/new'> + Create New Post</a>
+</div>
 <hr>
 	{% for post in posts %}
+		<br>
 		<h2>{{ post.title }}</h2>
-		<p>{{post.content}}<p>
+		<small>Written by: {{post.author}} on {{post.post_date}} </small>
+		<br>
+		<br>
+		<p style = "white-space : pre-wrap">{{post.content}}<p>
+		<br>
+		<a class = 'btn btn-danger' href = '/posts/delete/{{post.id}}'>Delete</a>
+		<a class = 'btn btn-primary' href = '/posts/edit/{{post.id}}'>Edit</a>
+                <hr>
 	{% endfor %}
 
 {% endblock %}

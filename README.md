@@ -256,3 +256,81 @@ def posts():
         all_posts = BlogPost.query.order_by(BlogPost.post_date.desc()).all()
         return render_template('posts.html', posts = all_posts)
 ```
+- In the database, we can query objects based on certain requirements so let's look at some such commmands
+```python
+# To filter objects based on some condition
+>>> BlogPost.query.filter_by(title = 'First Blog Post').all 
+
+# To get an object with certain id
+>>> BlogPost.query.get(1) # for object with id 1
+>>> BlogPost.query.get_or_404(1) # to break the process if id is absent
+
+# To delete an exiting entry from the database
+>>> db.session.delete(BlogPost.query.get(1)) # To delete object with id 1
+>>> db.session.commit() # To make the changes permanent
+
+# To update an existing entry from database
+>>> BlogPost.query.get(1).author = 'N/A' # changes author to 'N/A'
+>>> db.session.commit() # to make the changes permanent
+
+# To obtain data and order by in ascending and descending order
+>>> BlogPost.query.order_by(BlogPost.post_date.desc()).all() # Descending order
+>>> BlogPost.query.order_by(BlogPost.post_date).all() # Ascending order
+```
+- Now, to automate this process from the frontend, we define a function and a new route to carry out delete operations, so in **app.py** file define a new route as:
+
+```python
+@app.route('/posts/delete/<int:id>')
+    post_delete = BlogPost.query.get_or_404(id)
+    db.session.delete(post_delete)
+    db.session.commit()
+    return redirect('/posts')
+@app.route('/posts/edit/<int:id>', methods = ['GET', 'POST'])
+def edit(id):
+    post_edit = BlogPost.query.get_or_404(id)
+    if request.method == 'POST':
+        post.title = request.form['title']
+        post.content = request.form['content']
+        post.author = request.form['author']
+        db.session.commit()
+        return redirect('/posts')
+    else:
+        return render_template('edit.html', post = post_edit)
+```
+In the frontend file now add a button and link them to the new routes and create a new edit page
+```html
+<!--Other stuff above -->
+ {% for post in posts %}
+                <h2>{{ post.title }}</h2>
+                <h4>By: {{post.author}} </h4>
+                <p>{{post.content}}<p>
+                <a href = '/posts/delete/{{post.id}}'>Delete</a>
+                <a href = '/posts/edit/{{post.id}}'>Edit</a>
+                <hr>
+ {% endfor %}
+```
+The edit html is writen as:
+```html
+{% extends 'base.html' %}
+{% block head %}
+<title> Edit Post </title>
+{% endblock %}
+
+{% block body %}
+<h1> Edit  Post </h1>
+
+<hr>
+<h2>Edit Blog Post</h2>
+<form action = '/posts/edit/{{post.id}}' method = 'POST'>
+        Title : <input type = 'text' name = title id = 'title' value = '{{post.title}}'>
+        <br>
+        Post : <input type = 'text' name = 'content' id = 'content' value = '{{post.content}}'>
+        <br>
+        Author : <input type = 'text' name = 'author' id = 'author' value = '{{post.author}}'>
+        <br>
+        <input type = 'submit' value = 'Post'>
+</form>
+<hr>
+```
+- These are the basic crud functions for a database in flask
+

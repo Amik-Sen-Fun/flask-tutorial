@@ -7,7 +7,42 @@
 
 
 {% block body %}
+<main>
+  <div class="container py-4">
+    <header class="pb-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Welcome</span>
+      </a>
+    </header>
 
-<h1>Inherited Home Page </h1>
+    <div class="p-5 mb-4 bg-light rounded-3">
+      <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Flask Blogging App</h1>
+        <p class="col-md-8 fs-4">This app was built for understanding implementation of different CRUD functionalities in a flask application, with a Database</p>
+	<a href = "/posts"><button class="btn btn-primary btn-lg" type="button">Click to visit Blog</button></a>
+      </div>
+    </div>
 
+    <div class="row align-items-md-stretch">
+      <div class="col-md-6">
+        <div class="h-100 p-5 text-white bg-dark rounded-3">
+          <h2>Flask Tutorial</h2>
+          <p>The github repo and the flask tutorial used to make this application is give below. </p>
+	  <a href = "https://github.com/Amik-Sen-Fun/flask-tutorial"><button class="btn btn-outline-light" type="button">GitHub Repo</button></a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>Further Study</h2>
+          <p> For the final implementation we will connect the psql database which can be done with the help of the following article</p>
+	  <a href = "https://developer.okta.com/blog/2019/03/25/build-crud-app-with-python-flask-angular#bootstrap-your-angular-apps-python-api"><button class="btn btn-outline-secondary" type="button">Article</button></a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="pt-3 mt-4 text-muted border-top">
+      &copy; 2021
+    </footer>
+  </div>
+</main>
 {% endblock %}
