@@ -73,7 +73,12 @@ def hello():
 @app.rooute('/home/<string:name>')
 def hello(name):
   return "Hello, " + name
-``` 
+```
+Once we have defined a basic structure to run the application we just type the following in the terminal
+```
+python app.py
+```
+ 
 > The type of the URl data type can be <int>, <float> etc. Also we can have multiple such variables
 
 - We can make functions specifically for a partiular requests like post, get, out or delete
@@ -105,3 +110,20 @@ def index():
 
 - Similar to django we can create template inheritance and similar looping and variable stuff can be done in FLask also as both work on jinja. For understanding see the _base.html_ and then _index.html_ and observe the basic concept
   
+- To send data to the front end, we simply send the data from the app.py part to the template as shown below:
+
+```python
+all_posts = [{'title': 'Post1', 'content': 'This is content of post 1'}]
+@app.route('/posts')
+def showPosts():
+  return render_template('posts.html', posts = all_posts)
+```
+Now to access all the posts we make the following modifications in the post.html file which is done in jinja and are similar to django
+```html5
+<!---previous formatting stuff --->
+  {{% for post in posts %}}
+	<h1>{{post.title}}</h2>
+	<p>{{post.content}}</p>
+  {{% endfor %}}
+
+```
