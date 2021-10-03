@@ -119,11 +119,10 @@ def showPosts():
   return render_template('posts.html', posts = all_posts)
 ```
 Now to access all the posts we make the following modifications in the post.html file which is done in jinja and are similar to django
-```html5
+```html
 <!---previous formatting stuff --->
   {{% for post in posts %}}
 	<h1>{{post.title}}</h2>
 	<p>{{post.content}}</p>
   {{% endfor %}}
-
 ```
